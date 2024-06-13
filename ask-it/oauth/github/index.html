@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ask.IT - Authorization Successful</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #b8167d, #534c96, #113658);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .container {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+        }
+        .container h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        .container p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        .container a {
+            background-color: #534c96;
+            color: white;
+            padding: 15px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .container a:hover {
+            background-color: #113658;
+        }
+        .spinner {
+            margin: 20px auto;
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.2);
+            border-top: 5px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Authorization Successful</h1>
+        <div class="spinner" id="spinner"></div>
+        <p id="status">We are analyzing your skills...</p>
+        <a id="continueButton" href="/ask-it/expert" style="display: none;">Continue to ask.IT</a>
+    </div>
+
+    <script>
+        // Function to change the status text and display the continue button after 10 seconds
+        setTimeout(() => {
+            document.getElementById('spinner').style.display = 'none';
+            document.getElementById('status').innerText = 'Skills detected: JavaScript, Python, HTML/CSS, React, Django';
+            document.getElementById('continue').style.display = 'block';
+            document.getElementById('continueButton').style.display = 'inline-block';
+        }, 10000); // 10 seconds in milliseconds
+    </script>
+</body>
+</html>

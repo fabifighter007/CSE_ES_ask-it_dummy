@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ask.IT - Expert Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #b8167d, #534c96, #113658);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        .container {
+            padding: 20px;
+            width: 80%;
+            max-width: 1200px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .skills {
+            margin-bottom: 20px;
+        }
+        .skills h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .skills ul {
+            list-style: none;
+            padding: 0;
+        }
+        .skills ul li {
+            display: inline-block;
+            background-color: #534c96;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 5px;
+        }
+        .questions {
+            width: 100%;
+        }
+        .questions h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .questions ul {
+            list-style: none;
+            padding: 0;
+        }
+        .questions ul li {
+            background-color: #113658;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: left;
+            cursor: pointer;
+        }
+        .questions ul li .title {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .questions ul li .details {
+            font-size: 1em;
+        }
+        .questions ul li .details span {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            color: #333;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal-content h3 {
+            margin-top: 0;
+        }
+        .modal-content form textarea {
+            width: 100%;
+            height: 100px;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .modal-content form button {
+            background-color: #534c96;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            border-radius: 5px;
+        }
+        .modal-content form button:hover {
+            background-color: #113658;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="skills">
+            <h2>Your Skills</h2>
+            <ul>
+                <li>JavaScript</li>
+                <li>Python</li>
+                <li>HTML/CSS</li>
+                <li>React</li>
+                <li>Django</li>
+            </ul>
+        </div>
+        <div class="questions">
+            <h2>Questions for You</h2>
+            <ul>
+                <li onclick="openQuestion('How to center a div in CSS?', 'I need help with centering a div in CSS. What are the possible ways to achieve this?', '3 hours', '50 points')">
+                    <div class="title">How to center a div in CSS?</div>
+                    <div class="details">
+                        <span>Time Left: 3 hours</span>
+                        <span>Reward: 50 points</span>
+                    </div>
+                </li>
+                <li onclick="openQuestion('How to implement authentication in Django?', 'I want to implement authentication in my Django project. Can someone guide me through the process?', '5 hours', '100 points')">
+                    <div class="title">How to implement authentication in Django?</div>
+                    <div class="details">
+                        <span>Time Left: 5 hours</span>
+                        <span>Reward: 100 points</span>
+                    </div>
+                </li>
+                <li onclick="openQuestion('Best practices for writing JavaScript functions?', 'What are some best practices to follow when writing functions in JavaScript?', '2 days', '75 points')">
+                    <div class="title">Best practices for writing JavaScript functions?</div>
+                    <div class="details">
+                        <span>Time Left: 2 days</span>
+                        <span>Reward: 75 points</span>
+                    </div>
+                </li>
+                <li onclick="openQuestion('How to manage state in a React application?', 'I am struggling with state management in my React application. Can anyone help?', '8 hours', '120 points')">
+                    <div class="title">How to manage state in a React application?</div>
+                    <div class="details">
+                        <span>Time Left: 8 hours</span>
+                        <span>Reward: 120 points</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Modal for viewing and answering questions -->
+    <div id="questionModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeQuestion()">&times;</span>
+            <h3 id="questionTitle"></h3>
+            <p id="questionDetails"></p>
+            <form id="answerForm">
+                <textarea id="answerText" placeholder="Type your answer here..."></textarea>
+                <button type="button" onclick="submitAnswer()">Submit Answer</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openQuestion(title, details, timeLeft, reward) {
+            document.getElementById('questionTitle').innerText = title;
+            document.getElementById('questionDetails').innerHTML = `<strong>Time Left:</strong> ${timeLeft} <br> <strong>Reward:</strong> ${reward} <br> <br> ${details}`;
+            document.getElementById('questionModal').style.display = "flex";
+        }
+
+        function closeQuestion() {
+            document.getElementById('questionModal').style.display = "none";
+        }
+
+        function submitAnswer() {
+            const answer = document.getElementById('answerText').value;
+            if (answer) {
+                alert('Your answer has been submitted!');
+                document.getElementById('answerForm').reset();
+                closeQuestion();
+            } else {
+                alert('Please write an answer before submitting.');
+            }
+        }
+    </script>
+</body>
+</html>
